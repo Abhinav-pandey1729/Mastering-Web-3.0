@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports Facility Management</title>
+    <style>
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        button {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sports Facility Management</h1>
+        <div id="output"></div>
+        <form id="bookingForm">
+            <label for="facility">Select Facility:</label>
+            <select id="facility">
+                <option value="gym">Gym</option>
+                <option value="squash">Squash Court</option>
+                <option value="badminton">Badminton Court</option>
+                <option value="TT">Table Tennis</option>
+                <option value="snooker">pool table</option>
+                <option value="swimming">swimming pool</option>
+            </select>
+            <label for="rollNumber">Roll Number:</label>
+            <input type="text" id="rollNumber" required>
+            <button type="submit">Book Slot</button>
+        </form>
+        <button onclick="checkAvailability()">Check Availability</button>
+        <button onclick="showHistory()">Show Booking History</button>
+    </div>
+    <script>
+        // Define Facility class
+        class Facility {
+            constructor(name) {
+                this.name = name;
+                this.slots = [];
+            }
+
+            bookSlot(rollNumber) {
+                const slot = {
+                    bookedBy: rollNumber,
+                    bookedAt: new Date()
+                };
+                this.slots.push(slot);
+                return slot;
+            }
+
+            isSlotAvailable() {
+                return this.slots.length < 5; // Assuming 5 slots available
+            }
+
+            getBookingHistory() {
+                return this.slots;
+            }
+        }
+
+        // Initialize facilities
+        const gym = new Facility("Gym");
+        const squashCourt = new Facility("Squash Court");
+        const badmintonCourt = new Facility("Badminton Court");
+        const TableTennis = new Facility("Table Tennis");
+        const pooltable = new Facility("pool table");
+        const swimmingpool = new Facility("swimming pool");
+
+        // Function to handle form submission
+        document.getElementById('bookingForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const facility = document.getElementById('facility').value;
+            const rollNumber = document.getElementById('rollNumber').value;
+
+            let selectedFacility;
+            switch(facility) {
+                case 'gym':
+                    selectedFacility = gym;
+                    break;
+                case 'squash':
+                    selectedFacility = squashCourt;
+                    break;
+                case 'badminton':
+                    selectedFacility = badmintonCourt;
+                    break;
+                case 'TT':
+                    selectedFacility = TableTennis;
+                    break;
+                case 'snooker':
+                    selectedFacility = pooltable;
+                    break;
+                case 'swimming':
+                    selectedFacility = swimmingpool;
+                    break;
+            }
+
+            if(selectedFacility.isSlotAvailable()) {
+                const bookedSlot = selectedFacility.bookSlot(rollNumber);
+                document.getElementById('output').innerHTML = `${facility} slot booked successfully for Roll Number ${rollNumber} at ${bookedSlot.bookedAt}`;
+            } else {
+                document.getElementById('output').innerHTML = `${facility} slot is not available.`;
+            }
+        });
+
+        // Function to check availability
+        function checkAvailability() {
+            const facility = document.getElementById('facility').value;
+
+            let selectedFacility;
+            switch(facility) {
+                case 'gym':
+                    selectedFacility = gym;
+                    break;
+                case 'squash':
+                    selectedFacility = squashCourt;
+                    break;
+                case 'badminton':
+                    selectedFacility = badmintonCourt;
+                    break;
+                case 'TT':
+                    selectedFacility = TableTennis;
+                    break;
+                case 'snooker':
+                    selectedFacility = pooltable;
+                    break;
+                case 'swimming':
+                    selectedFacility = swimmingpool;
+                    break;
+            }
+
+            if(selectedFacility.isSlotAvailable()) {
+                document.getElementById('output').innerHTML = `${facility} slot is available.`;
+            } else {
+                document.getElementById('output').innerHTML = `${facility} slot is not available.`;
+            }
+        }
+
+        // Function to show booking history
+        function showHistory() {
+            const facility = document.getElementById('facility').value;
+
+            let selectedFacility;
+            switch(facility) {
+                case 'gym':
+                    selectedFacility = gym;
+                    break;
+                case 'squash':
+                    selectedFacility = squashCourt;
+                    break;
+                case 'badminton':
+                    selectedFacility = badmintonCourt;
+                    break;
+                case 'TT':
+                    selectedFacility = TableTennis;
+                    break;
+                case 'snooker':
+                    selectedFacility = pooltable;
+                    break;
+                case 'swimming':
+                    selectedFacility = swimmingpool;
+                    break;
+            }
+
+            const history = selectedFacility.getBookingHistory();
+            let output = '<h2>Booking History</h2>';
+            if(history.length === 0) {
+                output += 'No bookings yet.';
+            } else {
+                history.forEach(slot => {
+                    output += `<p>Booked by: ${slot.bookedBy} at ${slot.bookedAt}</p>`;
+                });
+            }
+            document.getElementById('output').innerHTML = output;
+        }
+    </script>
+</body>
+</html>
